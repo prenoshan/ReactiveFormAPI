@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using ReactiveFormAPI.Common;
 using ReactiveFormAPI.Models;
 
@@ -20,7 +14,6 @@ namespace ReactiveFormAPI.Controllers
         [HttpPost]
         public async Task Insert(User user)
         {
-
             using (SqlConnection sql = new SqlConnection(Global.ConnectionString))
             {
 
@@ -31,7 +24,7 @@ namespace ReactiveFormAPI.Controllers
 
                     cmd.Parameters.Add(new SqlParameter("@email", user.email));
                     cmd.Parameters.Add(new SqlParameter("@password", user.password));
-                    cmd.Parameters.Add(new SqlParameter("@imageBase64", user.imageBase64));
+                    cmd.Parameters.Add(new SqlParameter("@imageBase64", user.image));
 
                     await sql.OpenAsync();
                     await cmd.ExecuteNonQueryAsync();
@@ -39,7 +32,6 @@ namespace ReactiveFormAPI.Controllers
                 }
 
             }
-
         }
 
     }

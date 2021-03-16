@@ -13,7 +13,9 @@ using ReactiveFormAPI.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
+using ReactiveFormAPI.Data;
 
 namespace ReactiveFormAPI
 {
@@ -47,10 +49,15 @@ namespace ReactiveFormAPI
             });
 
             services.AddControllers();
+
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ReactiveFormAPI", Version = "v1" });
             });
+
+            services.AddDbContext<ReactiveFormAPIContext>(options =>
+                    options.UseSqlServer(Configuration.GetConnectionString("ReactiveFormDB")));
 
         }
 
@@ -76,6 +83,13 @@ namespace ReactiveFormAPI
             {
                 endpoints.MapControllers();
             });
+
+            using (var serviceScope = app.ApplicationServices.CreateScope())
+            {
+                var context = serviceScope.ServiceProvider.GetService<ReactiveFormAPIContext>();
+                context.Database.Migrate();
+            }
+
         }
     }
 }

@@ -18,6 +18,6 @@ namespace ReactiveFormAPI.Models
 
         public string password { get; set; }
 
-        public string imageBase64 { get; set; }
+        public string image { get; set; }
     }
 }
