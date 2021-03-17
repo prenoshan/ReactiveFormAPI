@@ -20,7 +20,7 @@ values (@email, @password, @imageBase64)
 
 else
 
-raiserror('email exists', 16, 1)
+raiserror('Email Already Exists', 16, 1)
 
 end;
 
