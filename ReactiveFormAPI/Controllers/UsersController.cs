@@ -12,26 +12,35 @@ namespace ReactiveFormAPI.Controllers
     {
 
         [HttpPost]
-        public async Task Insert(User user)
+        public async Task<IActionResult> Insert(User user)
         {
-            using (SqlConnection sql = new SqlConnection(Global.ConnectionString))
+            try
             {
-
-                using (SqlCommand cmd = new SqlCommand("insert_UserDetails", sql))
+                using (SqlConnection sql = new SqlConnection(Global.ConnectionString))
                 {
 
-                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                    using (SqlCommand cmd = new SqlCommand("insert_UserDetails", sql))
+                    {
 
-                    cmd.Parameters.Add(new SqlParameter("@email", user.email));
-                    cmd.Parameters.Add(new SqlParameter("@password", user.password));
-                    cmd.Parameters.Add(new SqlParameter("@imageBase64", user.image));
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
 
-                    await sql.OpenAsync();
-                    await cmd.ExecuteNonQueryAsync();
+                        cmd.Parameters.Add(new SqlParameter("@email", user.email));
+                        cmd.Parameters.Add(new SqlParameter("@password", user.password));
+                        cmd.Parameters.Add(new SqlParameter("@imageBase64", user.image));
+
+                        await sql.OpenAsync();
+                        await cmd.ExecuteNonQueryAsync();
+
+                    }
 
                 }
-
             }
+            catch (SqlException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+            return Ok();
         }
 
     }
