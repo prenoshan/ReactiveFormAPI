@@ -10,7 +10,18 @@ GO
 
 CREATE procedure [dbo].[insert_userDetails] @email nvarchar(150), @password nvarchar(150), @imageBase64 varchar(max)
 as
+
+begin
+
+if not exists (select email from [user] where email = @email)
+
 insert into [user](email, password, image)
 values (@email, @password, @imageBase64)
-GO
 
+else
+
+raiserror('email exists', 16, 1)
+
+end;
+
+GO
